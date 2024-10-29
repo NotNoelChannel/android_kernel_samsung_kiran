@@ -1,0 +1,62 @@
+name: Kernel CI (SM-Z120H)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout Kernel Source
+      uses: actions/checkout@v3
+
+    - name: Getting Toolchain
+      run: |
+        sudo apt-get install lib32z1
+        sudo git clone --depth 1 --branch android-4.4.4_r2.0.1 --single-branch https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.7 /opt/toolchains/arm-eabi-4.7/
+
+    - name: Building Kernel
+      run: |
+        export RELEASE_DATE=`date +%Y%m%d`
+        export BOOT_PATH="arch/arm/boot"
+        export DZIMAGE="dzImage"
+        make ARCH=arm tizen_kiran_defconfig
+        make -j12 zImage ARCH=arm
+        export DTC_PATH="scripts/dtc"
+        rm $BOOT_PATH/dts/*.dtb -f
+        make ARCH=arm dtbs
+        dtbtool -o $BOOT_PATH/merged-dtb -p $DTC_PATH -v $BOOT_PATH/dts
+        mkdzimage -o $BOOT_PATH/$DZIMAGE -k $BOOT_PATH/zImage -d $BOOT_PATH/merged-dtb
+        echo Done!
+    - name: Moving Output # CI only
+      run: |
+        mkdir -p /home/runner/work/output
+        cp arch/arm/boot/zImage /home/runner/work/output/zImage
+        cp arch/arm/boot/mkdzImage /home/runner/work/output/mkdzImage
+        cp arch/arm/boot/merged-dtb /home/runner/work/output/merged-dtb
+        find . -name "*.ko" -exec cp {} /home/runner/work/output/ \;
+
+    - name: Uploading zImage
+      uses: actions/upload-artifact@v3
+      with:
+        name: zImage
+        path: /home/runner/work/output/zImage
+        
+    - name: Uploading Tizen image
+      uses: actions/upload-artifact@v3
+      with:
+        name: mkdzImage
+        path: /home/runner/work/output/mkdzImage
+
+    - name: Uploading device tree blob
+      uses: actions/upload-artifact@v3
+      with:
+        name: dtb
+        path: /home/runner/work/output/merged-dtb
+
+    - name: Uploading Modules
+      uses: actions/upload-artifact@v3
+      with:
+        name: modules
+        path: /home/runner/work/output/*.ko
