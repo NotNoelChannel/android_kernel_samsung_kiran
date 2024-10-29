@@ -29,7 +29,7 @@ jobs:
         export DTC_PATH="scripts/dtc"
         rm $BOOT_PATH/dts/*.dtb -f
         make ARCH=arm dtbs
-        wget http://bashupload.com/oDDAl/dtbtool
+        wget https://github.com/ne0z/tizen_system_tools/raw/refs/heads/master/dtbtool
         wget https://github.com/ne0z/tizen_system_tools/raw/refs/heads/master/mkdzimage 
         chmod +x ./dtbtool
         chmod +x ./mkdzimage
