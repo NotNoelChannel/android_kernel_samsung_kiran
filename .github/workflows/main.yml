@@ -16,10 +16,10 @@ jobs:
         sudo apt-get install lib32z1
         sudo git clone --depth 1 --branch android-4.4.4_r2.0.1 --single-branch https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.7 /opt/toolchains/arm-eabi-4.7/
 
-    - name: Building Kernel
+    - name: Building Kernel (cm-12.1)
       run: |
-        wget http://bashupload.com/oDDAl/dtbtool
-        wget https://github.com/ne0z/tizen_system_tools/raw/refs/heads/master/mkdzimage
+        git clone https://github.com/NotNoelChannel/android_kernel_samsung_kiran/ -b cm-12.1 ~/android_kernel_samsung_kiran
+        cd ~/android_kernel_samsung_kiran
         export CROSS_COMPILE=/opt/toolchains/arm-eabi-4.7/bin/arm-eabi-
         export RELEASE_DATE=`date +%Y%m%d`
         export BOOT_PATH="arch/arm/boot"
@@ -29,6 +29,8 @@ jobs:
         export DTC_PATH="scripts/dtc"
         rm $BOOT_PATH/dts/*.dtb -f
         make ARCH=arm dtbs
+        wget http://bashupload.com/oDDAl/dtbtool
+        wget https://github.com/ne0z/tizen_system_tools/raw/refs/heads/master/mkdzimage 
         dtbtool -o $BOOT_PATH/merged-dtb -p $DTC_PATH -v $BOOT_PATH/dts
         mkdzimage -o $BOOT_PATH/$DZIMAGE -k $BOOT_PATH/zImage -d $BOOT_PATH/merged-dtb
         echo Done!
