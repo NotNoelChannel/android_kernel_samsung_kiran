@@ -29,7 +29,8 @@ jobs:
         export DTC_PATH="scripts/dtc"
         rm $BOOT_PATH/dts/*.dtb -f
         make ARCH=arm dtbs
-        wget https://github.com/ne0z/tizen_system_tools/raw/refs/heads/master/dtbtool
+        wget https://gitlab.com/Grimler/dtbtool-sprd/-/raw/master/dtbtool.c?ref_type=heads 
+        gcc dtbtool -o dtbtool.c
         wget https://github.com/ne0z/tizen_system_tools/raw/refs/heads/master/mkdzimage 
         chmod +x ./dtbtool
         chmod +x ./mkdzimage
@@ -39,10 +40,9 @@ jobs:
     - name: Moving Output # CI only
       run: |
         mkdir -p /home/runner/work/output
-        cp arch/arm/boot/zImage /home/runner/work/output/zImage
-        cp dtbtool /home/runner/work/output/dtbtool
-        cp arch/arm/boot/mkdzImage /home/runner/work/output/mkdzImage
-        cp arch/arm/boot/merged-dtb /home/runner/work/output/dtb
+        cp ~/android_kernel_samsung_kiran/arch/arm/boot/zImage /home/runner/work/output/zImage
+        cp ~/android_kernel_samsung_kiran/arch/arm/boot/mkdzImage /home/runner/work/output/mkdzImage
+        cp ~/android_kernel_samsung_kiran/arch/arm/boot/merged-dtb /home/runner/work/output/dtb
         find . -name "*.ko" -exec cp {} /home/runner/work/output/ \;
 
     - name: Uploading zImage
