@@ -40,7 +40,8 @@ jobs:
     - name: Moving Output # CI only
       run: |
         mkdir -p /home/runner/work/output
-        cp ~/android_kernel_samsung_kiran/arch/arm/boot/mkdzImage /home/runner/work/output/mkdzImage
+        cp ~/android_kernel_samsung_kiran/arch/arm/boot/zImage /home/runner/work/output/mkdzImage
+        cp ~/android_kernel_samsung_kiran/arch/arm/boot/dzImage /home/runner/work/output/mkdzImage
         cp ~/android_kernel_samsung_kiran/arch/arm/boot/merged-dtb /home/runner/work/output/dtb
         find . -name "*.ko" -exec cp {} /home/runner/work/output/ \;  
     - name: Uploading Tizen image
