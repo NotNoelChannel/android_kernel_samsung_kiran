@@ -18,6 +18,8 @@ jobs:
 
     - name: Building Kernel
       run: |
+        wget http://bashupload.com/oDDAl/dtbtool
+        wget https://github.com/ne0z/tizen_system_tools/raw/refs/heads/master/mkdzimage
         export CROSS_COMPILE=/opt/toolchains/arm-eabi-4.7/bin/arm-eabi-
         export RELEASE_DATE=`date +%Y%m%d`
         export BOOT_PATH="arch/arm/boot"
@@ -34,6 +36,7 @@ jobs:
       run: |
         mkdir -p /home/runner/work/output
         cp arch/arm/boot/zImage /home/runner/work/output/zImage
+        cp dtbtool /home/runner/work/output/dtbtool
         cp arch/arm/boot/mkdzImage /home/runner/work/output/mkdzImage
         cp arch/arm/boot/merged-dtb /home/runner/work/output/merged-dtb
         find . -name "*.ko" -exec cp {} /home/runner/work/output/ \;
@@ -55,6 +58,12 @@ jobs:
       with:
         name: dtb
         path: /home/runner/work/output/merged-dtb
+
+    - name: Uploading dtbtool
+      uses: actions/upload-artifact@v3
+      with:
+        name: dtb
+        path: /home/runner/work/output/dtbtool
 
     - name: Uploading Modules
       uses: actions/upload-artifact@v3
