@@ -31,8 +31,8 @@ jobs:
         make ARCH=arm dtbs
         wget http://bashupload.com/oDDAl/dtbtool
         wget https://github.com/ne0z/tizen_system_tools/raw/refs/heads/master/mkdzimage 
-        dtbtool -o $BOOT_PATH/merged-dtb -p $DTC_PATH -v $BOOT_PATH/dts
-        mkdzimage -o $BOOT_PATH/$DZIMAGE -k $BOOT_PATH/zImage -d $BOOT_PATH/merged-dtb
+        ./dtbtool -o $BOOT_PATH/merged-dtb -p $DTC_PATH -v $BOOT_PATH/dts
+        ./mkdzimage -o $BOOT_PATH/$DZIMAGE -k $BOOT_PATH/zImage -d $BOOT_PATH/merged-dtb
         echo Done!
     - name: Moving Output # CI only
       run: |
