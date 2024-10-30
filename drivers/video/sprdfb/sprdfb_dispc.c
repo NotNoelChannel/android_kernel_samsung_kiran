@@ -362,7 +362,11 @@ extern void dsi_irq_trick(void);
 #endif
 
 /* FIXME:!! when we not clear the register in dispc, phone doesn't bootup */
+#ifdef CONFIG_DRM_SPRD
 extern u32 dispc_int_status;
+#else
+u32 dispc_int_status;
+#endif
 //static uint32_t underflow_ever_happened = 0;
 static irqreturn_t dispc_isr(int irq, void *data)
 {
