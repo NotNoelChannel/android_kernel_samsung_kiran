@@ -20,6 +20,12 @@ jobs:
       run: |
         git clone https://github.com/NotNoelChannel/android_kernel_samsung_kiran/ -b cm-12.1 ~/android_kernel_samsung_kiran
         cd ~/android_kernel_samsung_kiran
+        wget https://gitlab.com/postmarketOS/pmaports/-/raw/master/device/testing/linux-samsung-kiran/0001-kiran-initramfs.patch
+        wget https://gitlab.com/postmarketOS/pmaports/-/raw/master/device/testing/linux-samsung-kiran/0003-mmc-card-not-access-RPMB-partition-for-normal-read-and-write.patch
+        wget https://gitlab.com/postmarketOS/pmaports/-/raw/master/device/testing/linux-samsung-kiran/0004-sprdfb-fix-mmap-address.patch
+        patch -p1 < 0001-kiran-initramfs.patch
+        patch -p1 < 0003-mmc-card-not-access-RPMB-partition-for-normal-read-and-write.patch
+        patch -p1 < 0004-sprdfb-fix-mmap-address.patch
         export CROSS_COMPILE=/opt/toolchains/arm-eabi-4.7/bin/arm-eabi-
         export RELEASE_DATE=`date +%Y%m%d`
         export BOOT_PATH="arch/arm/boot"
