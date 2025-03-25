@@ -34,11 +34,6 @@
 
 #include "power.h"
 
-	[PM_SUSPEND_STANDBY] = { "standby", PM_SUSPEND_STANDBY },
-	[PM_SUSPEND_MEM] = { "mem", PM_SUSPEND_MEM },
->>>>>>> e89547b87ae4 (PM / sleep: Add state field to pm_states[] entries)
-};
-}
 static const struct platform_suspend_ops *suspend_ops;
 
 static DECLARE_WAIT_QUEUE_HEAD(suspend_freeze_wait_head);
@@ -328,15 +323,8 @@ static int enter_state(suspend_state_t state)
 
 	suspend_sys_sync_queue();
 
-<<<<<<< HEAD
-	pr_debug("PM: Preparing system for %s sleep\n", pm_states[state]);
-	error = suspend_prepare();
-=======
 	pr_debug("PM: Preparing system for %s sleep\n", pm_states[state].label);
 	error = suspend_prepare(state);
->>>>>>> e89547b87ae4 (PM / sleep: Add state field to pm_states[] entries)
-	if (error)
-		goto Unlock;
 
 	if (suspend_test(TEST_FREEZER))
 		goto Finish;
