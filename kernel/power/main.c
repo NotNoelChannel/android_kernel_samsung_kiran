@@ -319,7 +319,6 @@ static suspend_state_t decode_state(const char *buf, size_t n)
 #else
 	suspend_state_t state = PM_SUSPEND_MIN;
 #endif
-	const char * const *s;
 	struct pm_sleep_state *s;
 #endif
 	char *p;
